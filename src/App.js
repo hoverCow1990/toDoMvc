@@ -1,13 +1,19 @@
-import React,{ Componment } from "react";
-import Main from "./component/main/main.js";
-
-
-const App = React.createClass({
-	render(){
+import React,{ Component } from "react";
+import {Provider} from 'react-redux';
+import {ToDoMvc} from './mainPlate/ToDoMvc/ToDoMvc.js';
+import ToDoMvcStore from './store/ToDoMvc/store.js';
+console.log(ToDoMvcStore.getState());
+class App extends Component{
+	constructor(){
+   	 	super();
+  	}
+  	render(){
 		return (
-			<Main />
+			<Provider store={ToDoMvcStore}>
+				<ToDoMvc/>
+			</Provider>
 		)
 	}
-})
+}
 
 export default App;
