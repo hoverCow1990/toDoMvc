@@ -10,8 +10,6 @@ var webpack 		    =  require("webpack"),
 	CleanWebpackPlugin  =  require('clean-webpack-plugin'),   	   //清除文件夹
 	prod 				=  process.env.NODE_ENV === 'production';  //定义环境
 
-
-
 //定义环境路径
 var outFileName         =  prod?"build":"dist";
 
@@ -48,7 +46,7 @@ fs.readdirSync(htmlPath, 'utf8').forEach((name) => {  		//name为所有文件夹
 var cleanDist = prod?["build"]:["dist"];
 
 var pluginsArr = Array.prototype.slice.call([
-		//new CleanWebpackPlugin(cleanDist),
+		new CleanWebpackPlugin(cleanDist),
 	]).concat(htmlDir);
 if(prod){
 	pluginsArr = pluginsArr.concat([							
@@ -63,8 +61,16 @@ if(prod){
 		new webpack.optimize.UglifyJsPlugin({   //压缩js
 	        compress: {
 	          warnings: false
-	        }
+	        },
+	        output: {
+			  comments: false,
+			},
 	    }),
+	    new webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': JSON.stringify('production')
+            }
+        })
 	]);
 }
 
@@ -72,7 +78,7 @@ var webpackConfig = {
 	devtool: "source-map",
 	entry : Object.assign(
 		entryDir,
-		{"comment" : ["jquery"]}
+		{"comment" : []}
 	),
 	output : {
 		path: distDir, 					//输出路径,需传入绝对路径
